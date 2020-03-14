@@ -16,7 +16,6 @@ use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Statement;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
-use Nette\Utils\Validators;
 use stdClass;
 
 /**
@@ -46,19 +45,19 @@ class OAuth2ServerExtension extends CompilerExtension
 			'privateKey' => Expect::array([
 				'path' => Expect::string(),
 				'passPhrase' => Expect::string(),
-				'permissionCheck' => Expect::bool(TRUE),
+				'permissionCheck' => Expect::bool(true),
 			]),
 			'publicKey' => Expect::array([
 				'path' => Expect::string(),
 				'passPhrase' => Expect::string(),//todo Public key has no passphrase
-				'permissionCheck' => Expect::bool(TRUE),
+				'permissionCheck' => Expect::bool(true),
 			]),
 			'grants' => Expect::array([
-				self::GRANT_AUTH_CODE => Expect::bool(FALSE),
-				self::GRANT_CLIENT_CREDENTIALS => Expect::bool(FALSE),
-				self::GRANT_IMPLICIT => Expect::bool(FALSE),
-				self::GRANT_PASSWORD => Expect::bool(FALSE),
-				self::GRANT_REFRESH_TOKEN => Expect::bool(FALSE),
+				self::GRANT_AUTH_CODE => Expect::bool(false),
+				self::GRANT_CLIENT_CREDENTIALS => Expect::bool(false),
+				self::GRANT_IMPLICIT => Expect::bool(false),
+				self::GRANT_PASSWORD => Expect::bool(false),
+				self::GRANT_REFRESH_TOKEN => Expect::bool(false),
 			]),
 		]);
 	}
@@ -68,9 +67,6 @@ class OAuth2ServerExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->config;
 
-		// Encryption key
-		Validators::assertField($config, 'encryptionKey', 'string|\Nette\DI\Statement', $this->prefix('encryptionKey'));
-
 		// Keys
 		$privateKey = $this->loadKey('privateKey');
 		$publicKey = $this->loadKey('publicKey');
@@ -79,7 +75,7 @@ class OAuth2ServerExtension extends CompilerExtension
 		$authServer = $builder->addDefinition($this->prefix('authorizationServer'))
 			->setFactory(AuthorizationServer::class, [
 				'privateKey' => $privateKey,
-				'encryptionKey' => $config['encryptionKey'],
+				'encryptionKey' => $config->encryptionKey,
 			]);
 
 		$builder->addDefinition($this->prefix('resourceServer'))
@@ -88,60 +84,44 @@ class OAuth2ServerExtension extends CompilerExtension
 			]);
 
 		// Grants
-		Validators::assertField($config, 'grants', 'array');
-		foreach ($config['grants'] as $grant => $options) {
-
-			Validators::assert($options, 'array|bool');
-
-			if ($options === FALSE) {
+		foreach ($config->grants as $grant => $options) {
+			if ($options === false) {
 				continue;
 			}
-
 			$grantDefinition = $builder->addDefinition($this->prefix('grant.' . $grant));
 
 			switch ($grant) {
 				case self::GRANT_AUTH_CODE:
-					if (isset($options['codeExchangeProof']) && $options['codeExchangeProof'] === TRUE) {
+					if (isset($options->codeExchangeProof) && $options->codeExchangeProof === true) {
 						$grantDefinition->addSetup('enableCodeExchangeProof');
 					}
 
-					if (isset($options['authCodeTTL']) && $options['authCodeTTL'] !== FALSE) {
-						$ttl = $options['authCodeTTL'];
-					} else {
-						$ttl = 'PT10M';
-					}
+					$ttl = isset($options->authCodeTTL) && $options->authCodeTTL !== false ? $options->authCodeTTL : 'PT10M';
+
 					if (!$ttl instanceof Statement) {
 						$ttl = new Statement(DateInterval::class, [new DateInterval($ttl)]);
 					}
 
 					$grantDefinition->setFactory(AuthCodeGrant::class, ['authCodeTTL' => $ttl]);
 					break;
-
 				case self::GRANT_CLIENT_CREDENTIALS:
 					$grantDefinition->setFactory(ClientCredentialsGrant::class);
 					break;
-
 				case self::GRANT_IMPLICIT:
-					if (isset($options['accessTokenTTL']) && $options['accessTokenTTL'] !== FALSE) {
-						$ttl = $options['accessTokenTTL'];
-					} else {
-						$ttl = 'PT10M';
-					}
+					$ttl = isset($options->accessTokenTTL) && $options->accessTokenTTL !== false ? $options->accessTokenTTL : 'PT10M';
+
 					if (!$ttl instanceof Statement) {
 						$ttl = new Statement(DateInterval::class, [new DateInterval($ttl)]);
 					}
 
 					$grantDefinition->setFactory(ImplicitGrant::class, ['accessTokenTTL' => $ttl]);
 					break;
-
 				case self::GRANT_PASSWORD:
 					$grantDefinition->setFactory(PasswordGrant::class);
 					break;
-
 				case self::GRANT_REFRESH_TOKEN:
 					$grantDefinition->setFactory(RefreshTokenGrant::class);
 					break;
-
 				default:
 					throw new InvalidArgumentException(sprintf(
 						'Invalid or unsupported grant type "%s". Supported are %s.',
@@ -150,10 +130,11 @@ class OAuth2ServerExtension extends CompilerExtension
 					));
 			}
 
-			$ttl = $options['ttl'] ?? NULL;
-			if (!$ttl instanceof Statement && $ttl !== NULL) {
+			$ttl = $options->ttl ?? null;
+			if (!$ttl instanceof Statement && $ttl !== null) {
 				$ttl = new Statement(DateInterval::class, [new DateInterval($ttl)]);
 			}
+
 			$authServer->addSetup('enableGrantType', [$grantDefinition, $ttl]);
 		}
 	}
@@ -163,12 +144,7 @@ class OAuth2ServerExtension extends CompilerExtension
 		$config = $this->config;
 		$config = $config->$key;
 
-		Validators::assert($config, 'array', $this->prefix($key));
-		Validators::assertField($config, 'path', 'string', $this->prefix($key . '.path'));
-		Validators::assertField($config, 'passPhrase', 'string|null', $this->prefix($key . '.passPhrase'));
-		Validators::assertField($config, 'permissionCheck', 'bool', $this->prefix($key . '.permissionCheck'));
-
-		return new Statement(CryptKey::class, [$config->path, $config->passPhrase, $config->permissionCheck]);
+		return new Statement(CryptKey::class, [$config['path'], $config['passPhrase'], $config['permissionCheck']]);
 	}
 
 }
