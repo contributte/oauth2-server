@@ -17,7 +17,7 @@ test(function (): void {
 		$compiler->addExtension('oauth2Server', new OAuth2ServerExtension());
 		$compiler->loadConfig(FileMock::create('
 			oauth2Server:
-				encryptionKey: \'../../fixtures/\'
+				encryptionKey: \'Fc+FESy6/yfOlXMBW65BXoSZsfWJkP5jCV9w0fyFfw4=\'
 				privateKey:
 					path: \'../../fixtures/keys/private.key\'
 					passPhrase: foo
