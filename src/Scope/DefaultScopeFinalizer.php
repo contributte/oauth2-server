@@ -12,7 +12,7 @@ class DefaultScopeFinalizer implements IScopeFinalizer
 	 * @param ScopeEntityInterface[] $scopes
 	 * @return ScopeEntityInterface[]
 	 */
-	public function finalize(array $scopes, string $grantType, ClientEntityInterface $clientEntity, ?string $userIdentifier = NULL): array
+	public function finalize(array $scopes, string $grantType, ClientEntityInterface $clientEntity, ?string $userIdentifier = null): array
 	{
 		return $scopes;
 	}

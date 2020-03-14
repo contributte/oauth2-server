@@ -7,8 +7,8 @@ class DefaultISecretValidator implements ISecretValidator
 
 	public function validate(?string $expected, string $actual): bool
 	{
-		if ($expected === NULL) {
-			return FALSE;
+		if ($expected === null) {
+			return false;
 		}
 
 		return hash_equals($expected, $actual);
