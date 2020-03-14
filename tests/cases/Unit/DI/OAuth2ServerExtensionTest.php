@@ -21,11 +21,10 @@ test(function (): void {
 				privateKey:
 					path: "../../../fixtures/keys/private.key"
 					passPhrase: foo
-					permissionCheck: true
+					permissionCheck: false
 				publicKey:
 					path: "../../../fixtures/keys/public.key"
-					passPhrase:
-					permissionCheck: true
+					permissionCheck: false
 
 			services:
 				- Tests\Fixtures\Repositories\ClientRepository

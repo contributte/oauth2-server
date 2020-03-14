@@ -4,6 +4,7 @@ namespace Contributte\OAuth2Server\DI;
 
 use Contributte\OAuth2Server\Exception\InvalidArgumentException;
 use DateInterval;
+use Defuse\Crypto\Key;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
@@ -41,7 +42,7 @@ class OAuth2ServerExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'encryptionKey' => Expect::string(),
+			'encryptionKey' => Expect::anyof(Expect::string(), Expect::type(Key::class)),
 			'privateKey' => Expect::array([
 				'path' => Expect::string(),
 				'passPhrase' => Expect::string(),
@@ -49,7 +50,6 @@ class OAuth2ServerExtension extends CompilerExtension
 			]),
 			'publicKey' => Expect::array([
 				'path' => Expect::string(),
-				'passPhrase' => Expect::string(),//todo Public key has no passphrase
 				'permissionCheck' => Expect::bool(true),
 			]),
 			'grants' => Expect::array([
@@ -68,8 +68,8 @@ class OAuth2ServerExtension extends CompilerExtension
 		$config = $this->config;
 
 		// Keys
-		$privateKey = $this->loadKey('privateKey');
-		$publicKey = $this->loadKey('publicKey');
+		$privateKey = $this->loadPrivateKey();
+		$publicKey = $this->loadPublicKey();
 
 		// Servers
 		$authServer = $builder->addDefinition($this->prefix('authorizationServer'))
@@ -139,10 +139,18 @@ class OAuth2ServerExtension extends CompilerExtension
 		}
 	}
 
-	protected function loadKey(string $key): Statement
+	protected function loadPublicKey(): Statement
 	{
 		$config = $this->config;
-		$config = $config->$key;
+		$config = $config->publicKey;
+
+		return new Statement(CryptKey::class, [$config['path'], null, $config['permissionCheck']]);
+	}
+
+	protected function loadPrivateKey(): Statement
+	{
+		$config = $this->config;
+		$config = $config->privateKey;
 
 		return new Statement(CryptKey::class, [$config['path'], $config['passPhrase'], $config['permissionCheck']]);
 	}

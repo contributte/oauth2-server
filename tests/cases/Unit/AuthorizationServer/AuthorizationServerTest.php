@@ -29,11 +29,10 @@ test(function (): void {
 				privateKey:
 					path: "%s/../../../fixtures/keys/private.key"
 					passPhrase: foo
-					permissionCheck: true
+					permissionCheck: false
 				publicKey:
 					path: "%s/../../../fixtures/keys/public.key"
-					passPhrase:
-					permissionCheck: true
+					permissionCheck: false
 				grants:
 					refreshToken: true
 
