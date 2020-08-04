@@ -1,6 +1,13 @@
 {
   "name": "contributte/oauth2-server",
   "description": "An integration of League\\OAuth2Server into Nette framework",
+  "keywords": [
+    "nette",
+    "contributte",
+    "php",
+    "oauth2",
+    "oauth2 server"
+],
   "type": "library",
   "license": "MIT",
 	"require": {
