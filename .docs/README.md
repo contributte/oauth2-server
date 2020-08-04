@@ -4,6 +4,7 @@
 
 - [Setup](#setup)
 - [Configuration](#configuration)
+- [Example presenter](#example-presenter)
 
 ## Prologue
 
@@ -26,7 +27,7 @@ extensions:
 
 ## Configuration
 
-Do not forget to change the permissions on your public and private key to `600` (`0600`) or `660` (`0660`).
+Do not forget to change the permissions on your public and private key (`chmod 0600 public.key private.key`)
 Or you can turn off the permission check in configuration (`permissionCheck`) - **not recommended**.
 
 ```yaml
@@ -58,3 +59,52 @@ oauth2.server:
 Do not forget to register repositories as a services!
 
 For more information about The PHP League's OAuth2 server, check out it's [documentation](https://oauth2.thephpleague.com/). This package provides tiny wrappaper and integration into Nette framework.
+
+
+## Example presenter
+
+```php
+<?php declare(strict_types = 1);
+
+namespace App\Presenters;
+
+use Contributte\Psr7\Psr7Response;
+use Contributte\Psr7\Psr7ResponseFactory;
+use Contributte\Psr7\Psr7ServerRequestFactory;
+use Contributte\Psr7\Psr7Stream;
+use League\OAuth2\Server\AuthorizationServer;
+use Nette\Application\UI\Presenter;
+use Nette\Http\IResponse;
+use Nette\Http\IRequest;
+
+class OAuth2Presenter extends Presenter
+{
+
+    /** @var AuthorizationServer @inject */
+    public $authorizationServer;
+
+    public function actionEndpoint(): void
+    {
+        /** @var IRequest $request */
+        $request = $this->getHttpRequest();
+        $psr7Request = Psr7ServerRequestFactory::fromNette($request);
+        /** @var IResponse $response */
+        $response = $this->gethttpResponse();
+        $psr7Response = Psr7ResponseFactory::fromNette($response);
+
+        try {
+            $reply = $this->authorizationServer->respondToAccessTokenRequest($psr7Request, $psr7Response);
+        } catch (OAuthServerException $exception) {
+            $reply = $exception->generateHttpResponse($psr7Response);
+        } catch (Exception $exception) {
+            $body = new Psr7Stream('php://temp');
+            $body->write($exception->getMessage());
+            $reply = $psr7Response->withStatus(500)->withBody($body);
+        }
+
+        $sendResponse = Psr7Response::of($reply);
+        $this->sendResponse($sendResponse->getApplicationResponse());
+    }
+
+}
+```
