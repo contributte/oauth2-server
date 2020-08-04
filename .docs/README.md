@@ -4,7 +4,7 @@
 
 - [Setup](#setup)
 - [Configuration](#configuration)
-- [Example presenter](#example-presenter)
+- [Example](#example)
 
 ## Prologue
 
@@ -61,7 +61,7 @@ Do not forget to register repositories as a services!
 For more information about The PHP League's OAuth2 server, check out it's [documentation](https://oauth2.thephpleague.com/). This package provides tiny wrappaper and integration into Nette framework.
 
 
-## Example presenter
+## Example
 
 ```php
 <?php declare(strict_types = 1);
