@@ -1,4 +1,4 @@
-![](https://heatbadger.now.sh/github/contributte/oauth2-server/)
+![](https://heatbadger.now.sh/github/readme/contributte/oauth2-server/)
 
 <p align=center>
   <a href="https://travis-ci.org/contributte/oauth2-server"><img src="https://img.shields.io/travis/contributte/oauth2-server.svg?style=flat-square"></a>
