@@ -1,29 +1,32 @@
 <?php declare(strict_types = 1);
 
+namespace Tests\Cases\DI;
+
 use Contributte\OAuth2Server\DI\OAuth2ServerExtension;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
+use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tester\FileMock;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
-test(function (): void {
+Toolkit::test(function (): void {
 	$loader = new ContainerLoader(TEMP_DIR, true);
 	$class = $loader->load(function (Compiler $compiler): void {
 		$compiler->addExtension('oauth2.server', new OAuth2ServerExtension());
 		$compiler->loadConfig(FileMock::create('
 			oauth2.server:
-				encryptionKey: "Fc+FESy6/yfOlXMBW65BXoSZsfWJkP5jCV9w0fyFfw4="
+				encryptionKey: "fake"
 				privateKey:
-					path: "../../../fixtures/keys/private.key"
+					path: "../../fixtures/keys/private.key"
 					passPhrase: "foo"
 					permissionCheck: false
 				publicKey:
-					path: "../../../fixtures/keys/public.key"
+					path: "../../fixtures/keys/public.key"
 					permissionCheck: false
 
 			services:
@@ -43,19 +46,19 @@ test(function (): void {
 	Assert::count(1, $container->findByType(ResourceServer::class));
 });
 
-test(function (): void {
+Toolkit::test(function (): void {
 	$loader = new ContainerLoader(TEMP_DIR, true);
 	$class = $loader->load(function (Compiler $compiler): void {
 		$compiler->addExtension('oauth2.server', new OAuth2ServerExtension());
 		$compiler->loadConfig(FileMock::create('
 			oauth2.server:
-				encryptionKey: Defuse\Crypt\Key::loadFromAsciiSafeString("def00000476865502f4eb78fc95c40ba24041ac5eb23e7f470c69aef7df17d5f7dc8cf0f0d8e11eecf06234f0ca421c4f4eeafb2af7eaa9a85c1464e8d2f08abd3f7a492")
+				encryptionKey: Defuse\Crypto\Key::loadFromAsciiSafeString("fake")
 				privateKey:
-					path: "../../../fixtures/keys/private.key"
+					path: "../../fixtures/keys/private.key"
 					passPhrase: "foo"
 					permissionCheck: false
 				publicKey:
-					path: "../../../fixtures/keys/public.key"
+					path: "../../fixtures/keys/public.key"
 					permissionCheck: false
 
 			services:
@@ -66,7 +69,7 @@ test(function (): void {
 				- Tests\Fixtures\Repositories\RefreshTokenRepository
 				- Tests\Fixtures\Repositories\UserRepository
 		', 'neon'));
-	}, [getmypid(), 1]);
+	}, [getmypid(), 2]);
 
 	/** @var Container $container */
 	$container = new $class();

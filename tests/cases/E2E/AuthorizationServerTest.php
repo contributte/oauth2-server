@@ -1,9 +1,12 @@
 <?php declare(strict_types = 1);
 
+namespace Tests\Cases\E2E;
+
 use Contributte\OAuth2Server\DI\OAuth2ServerExtension;
 use Contributte\Psr7\Psr7Response;
 use Contributte\Psr7\Psr7ServerRequest;
 use Contributte\Psr7\Psr7Stream;
+use DateInterval;
 use GuzzleHttp\Psr7\Uri;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -12,13 +15,15 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
+use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tester\FileMock;
 use Tests\Fixtures\Repositories\RefreshTokenRepository;
+use Throwable;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
-test(function (): void {
+Toolkit::test(function (): void {
 	$loader = new ContainerLoader(TEMP_DIR, true);
 	$class = $loader->load(function (Compiler $compiler): void {
 		$compiler->addExtension('oauth2.server', new OAuth2ServerExtension());
@@ -27,11 +32,11 @@ test(function (): void {
 			oauth2.server:
 				encryptionKey: "Fc+FESy6/yfOlXMBW65BXoSZsfWJkP5jCV9w0fyFfw4="
 				privateKey:
-					path: "%s/../../../fixtures/keys/private.key"
+					path: "%s/../../fixtures/keys/private.key"
 					passPhrase: foo
 					permissionCheck: false
 				publicKey:
-					path: "%s/../../../fixtures/keys/public.key"
+					path: "%s/../../fixtures/keys/public.key"
 					permissionCheck: false
 				grants:
 					refreshToken: true
@@ -60,11 +65,7 @@ test(function (): void {
 
 	$authorizationServer->enableGrantType($grant, new DateInterval('PT1H'));
 
-	$request = new Psr7ServerRequest(
-		'GET',
-		new Uri('http://example.com')
-	);
-
+	$request = new Psr7ServerRequest('GET', new Uri('http://example.com'));
 	$response = new Psr7Response();
 
 	try {
@@ -77,5 +78,5 @@ test(function (): void {
 		$reply = $response->withStatus(500)->withBody($body);
 	}
 
-	Assert::equal(200, $reply->getStatusCode());
+	Assert::equal(400, $reply->getStatusCode());
 });

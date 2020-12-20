@@ -4,7 +4,6 @@ namespace Contributte\OAuth2Server\DI;
 
 use Contributte\OAuth2Server\Exception\InvalidArgumentException;
 use DateInterval;
-use Defuse\Crypto\Key;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
@@ -42,7 +41,7 @@ class OAuth2ServerExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'encryptionKey' => Expect::anyOf(Expect::string(), Expect::type(Key::class)),
+			'encryptionKey' => Expect::anyOf(Expect::string(), Expect::type(Statement::class)),
 			'privateKey' => Expect::array([
 				'path' => Expect::string(),
 				'passPhrase' => Expect::string(),
@@ -100,7 +99,7 @@ class OAuth2ServerExtension extends CompilerExtension
 					$ttl = isset($options->authCodeTTL) && $options->authCodeTTL !== false ? $options->authCodeTTL : 'PT10M';
 
 					if (!$ttl instanceof Statement) {
-						$ttl = new Statement(DateInterval::class, [new DateInterval($ttl)]);
+						$ttl = new Statement(DateInterval::class, [$ttl]);
 					}
 
 					$grantDefinition->setFactory(AuthCodeGrant::class, ['authCodeTTL' => $ttl]);
@@ -112,7 +111,7 @@ class OAuth2ServerExtension extends CompilerExtension
 					$ttl = isset($options->accessTokenTTL) && $options->accessTokenTTL !== false ? $options->accessTokenTTL : 'PT10M';
 
 					if (!$ttl instanceof Statement) {
-						$ttl = new Statement(DateInterval::class, [new DateInterval($ttl)]);
+						$ttl = new Statement(DateInterval::class, [$ttl]);
 					}
 
 					$grantDefinition->setFactory(ImplicitGrant::class, ['accessTokenTTL' => $ttl]);
@@ -133,7 +132,7 @@ class OAuth2ServerExtension extends CompilerExtension
 
 			$ttl = $options->ttl ?? null;
 			if (!$ttl instanceof Statement && $ttl !== null) {
-				$ttl = new Statement(DateInterval::class, [new DateInterval($ttl)]);
+				$ttl = new Statement(DateInterval::class, [$ttl]);
 			}
 
 			$authServer->addSetup('enableGrantType', [$grantDefinition, $ttl]);
