@@ -17,6 +17,7 @@
   },
   "require-dev": {
     "contributte/psr7-http-message": "^0.7",
+    "nette/application": "^3.0.6",
     "ninjify/nunjuck": "^0.4",
     "ninjify/qa": "^0.12",
     "phpstan/phpstan": "^0.12",
