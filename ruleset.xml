@@ -6,11 +6,11 @@
 	<!-- Specific rules -->
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
-			<property name="rootNamespaces" type="array" value="
-				src=>Contributte\OAuth2Server,
-				tests/cases=>Tests\Cases,
-				tests/fixtures=>Tests\Fixtures,
-			"/>
+			<property name="rootNamespaces" type="array">
+				<element key="src" value="Contributte\OAuth2Server"/>
+				<element key="tests/mocks" value="Tests\Cases"/>
+				<element key="tests/fixtures" value="Tests\Fixtures"/>
+			</property>
 		</properties>
 	</rule>
 
