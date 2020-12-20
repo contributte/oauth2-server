@@ -52,7 +52,7 @@ oauth2.server:
 For encryption key, you can use `Defuse\Crypt\Key::loadFromAsciiSafeString($string)` or key in a string form.
 ```yaml
 oauth2.server:
-  encryptionKey: Defuse\Crypt\Key::loadFromAsciiSafeString('keyInStringForm')
+  encryptionKey: Defuse\Crypto\Key::loadFromAsciiSafeString('keyInStringForm')
   # ...
 ```
 
