@@ -1,11 +1,8 @@
-<?php declare(strict_types=1);
-
+<?php declare(strict_types = 1);
 
 namespace Tests\Fixtures\Repositories;
 
-
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 
 final class ScopeRepository implements ScopeRepositoryInterface
@@ -26,4 +23,5 @@ final class ScopeRepository implements ScopeRepositoryInterface
 	{
 		// TODO: Implement finalizeScopes() method.
 	}
+
 }

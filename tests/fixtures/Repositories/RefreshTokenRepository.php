@@ -1,11 +1,8 @@
-<?php declare(strict_types=1);
-
+<?php declare(strict_types = 1);
 
 namespace Tests\Fixtures\Repositories;
 
-
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 final class RefreshTokenRepository implements RefreshTokenRepositoryInterface
@@ -42,4 +39,5 @@ final class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 	{
 		// TODO: Implement isRefreshTokenRevoked() method.
 	}
+
 }

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 use Contributte\OAuth2Server\DI\OAuth2ServerExtension;
 use Contributte\Psr7\Psr7Response;
@@ -71,7 +71,7 @@ test(function (): void {
 		$reply = $authorizationServer->respondToAccessTokenRequest($request, $response);
 	} catch (OAuthServerException $exception) {
 		$reply = $exception->generateHttpResponse($response);
-	} catch (Exception $exception) {
+	} catch (Throwable $exception) {
 		$body = new Psr7Stream('php://temp');
 		$body->write($exception->getMessage());
 		$reply = $response->withStatus(500)->withBody($body);

@@ -88,6 +88,7 @@ class OAuth2ServerExtension extends CompilerExtension
 			if ($options === false) {
 				continue;
 			}
+
 			$grantDefinition = $builder->addDefinition($this->prefix('grant.' . $grant));
 
 			switch ($grant) {

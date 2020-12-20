@@ -1,8 +1,6 @@
-<?php declare(strict_types=1);
-
+<?php declare(strict_types = 1);
 
 namespace Tests\Fixtures\Repositories;
-
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
@@ -24,4 +22,5 @@ final class ClientRepository implements ClientRepositoryInterface
 	{
 		// TODO: Implement validateClient() method.
 	}
+
 }

@@ -1,13 +1,9 @@
-<?php declare(strict_types=1);
-
+<?php declare(strict_types = 1);
 
 namespace Tests\Fixtures\Repositories;
 
-
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 
 final class AccessTokenRepository implements AccessTokenRepositoryInterface
@@ -44,4 +40,5 @@ final class AccessTokenRepository implements AccessTokenRepositoryInterface
 	{
 		// TODO: Implement isAccessTokenRevoked() method.
 	}
+
 }
