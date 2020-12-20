@@ -42,7 +42,7 @@ class OAuth2ServerExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'encryptionKey' => Expect::anyof(Expect::string(), Expect::type(Key::class)),
+			'encryptionKey' => Expect::anyOf(Expect::string(), Expect::type(Key::class)),
 			'privateKey' => Expect::array([
 				'path' => Expect::string(),
 				'passPhrase' => Expect::string(),
