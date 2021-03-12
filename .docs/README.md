@@ -21,9 +21,9 @@ composer require contributte/oauth2-server
 You also need to generate public and private key and an encryption key, for more information how to do it check
 out `League/OAuth2Server` documentation: https://oauth2.thephpleague.com/installation/.
 
-```yaml
+```neon
 extensions:
-  oauth2.server: Contributte\OAuth2Server\DI\OAuth2ServerExtension
+	oauth2.server: Contributte\OAuth2Server\DI\OAuth2ServerExtension
 ```
 
 ## Configuration
@@ -31,31 +31,31 @@ extensions:
 Do not forget to change the permissions on your public and private key (`chmod 0600 public.key private.key`)
 Or you can turn off the permission check in configuration (`permissionCheck`) - **not recommended**.
 
-```yaml
+```neon
 oauth2.server:
-  encryptionKey: "encryption key"
-  privateKey:
-    path: "/path/to/private.key"
-    passPhrase: "foo"
-    permissionCheck: true
-  publicKey:
-    path: "/path/to/public.key"
-    passPhrase:
-    permissionCheck: true
-  grants:
-    authCode: true
-    clientCredentials: true
-    implicit: true
-    password: true
-    refreshToken: true
+	encryptionKey: "encryption key"
+	privateKey:
+		path: "/path/to/private.key"
+		passPhrase: "foo"
+		permissionCheck: true
+	publicKey:
+		path: "/path/to/public.key"
+		passPhrase:
+		permissionCheck: true
+	grants:
+		authCode: true
+		clientCredentials: true
+		implicit: true
+		password: true
+		refreshToken: true
 ```
 
 For encryption key, you can use `Defuse\Crypt\Key::loadFromAsciiSafeString($string)` or key in a string form.
 
-```yaml
+```neon
 oauth2.server:
-  encryptionKey: Defuse\Crypto\Key::loadFromAsciiSafeString('keyInStringForm')
-  # ...
+	encryptionKey: Defuse\Crypto\Key::loadFromAsciiSafeString('keyInStringForm')
+	# ...
 ```
 
 Do not forget to register repositories as a services!
@@ -85,30 +85,30 @@ use Throwable;
 class OAuth2Presenter extends Presenter
 {
 
-    /** @var AuthorizationServer @inject */
-    public $authorizationServer;
+	/** @var AuthorizationServer @inject */
+	public $authorizationServer;
 
-    public function actionEndpoint(): void
-    {
-        /** @var IRequest $request */
-        $request = $this->getHttpRequest();
-        $psr7Request = Psr7ServerRequestFactory::fromNette($request);
-        /** @var IResponse $response */
-        $response = $this->gethttpResponse();
-        $psr7Response = Psr7ResponseFactory::fromNette($response);
+	public function actionEndpoint(): void
+	{
+		/** @var IRequest $request */
+		$request = $this->getHttpRequest();
+		$psr7Request = Psr7ServerRequestFactory::fromNette($request);
+		/** @var IResponse $response */
+		$response = $this->gethttpResponse();
+		$psr7Response = Psr7ResponseFactory::fromNette($response);
 
-        try {
-            $reply = $this->authorizationServer->respondToAccessTokenRequest($psr7Request, $psr7Response);
-        } catch (OAuthServerException $exception) {
-            $reply = $exception->generateHttpResponse($psr7Response);
-        } catch (Throwable $exception) {
-            $body = Utils::streamFor('php://temp');
-            $body->write($exception->getMessage());
-            $reply = $psr7Response->withStatus(500)->withBody($body);
-        }
+		try {
+			$reply = $this->authorizationServer->respondToAccessTokenRequest($psr7Request, $psr7Response);
+		} catch (OAuthServerException $exception) {
+			$reply = $exception->generateHttpResponse($psr7Response);
+		} catch (Throwable $exception) {
+			$body = Utils::streamFor('php://temp');
+			$body->write($exception->getMessage());
+			$reply = $psr7Response->withStatus(500)->withBody($body);
+		}
 
-        $this->sendResponse(new Oauth2Response($reply));
-    }
+		$this->sendResponse(new Oauth2Response($reply));
+	}
 
 }
 ```
