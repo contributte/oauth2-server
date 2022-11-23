@@ -58,6 +58,7 @@ class OAuth2ServerExtension extends CompilerExtension
 				self::GRANT_PASSWORD => Expect::bool(false),
 				self::GRANT_REFRESH_TOKEN => Expect::bool(false),
 			]),
+			'responseType' => Expect::type(Statement::class),
 		]);
 	}
 
@@ -75,6 +76,7 @@ class OAuth2ServerExtension extends CompilerExtension
 			->setFactory(AuthorizationServer::class, [
 				'privateKey' => $privateKey,
 				'encryptionKey' => $config->encryptionKey,
+				'responseType' => $config->responseType,
 			]);
 
 		$builder->addDefinition($this->prefix('resourceServer'))
