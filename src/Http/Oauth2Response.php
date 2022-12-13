@@ -2,7 +2,7 @@
 
 namespace Contributte\OAuth2Server\Http;
 
-use Nette\Application\IResponse as AppResponse;
+use Nette\Application\Response as AppResponse;
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
 use Psr\Http\Message\ResponseInterface;
