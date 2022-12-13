@@ -25,6 +25,9 @@
     "phpstan/phpstan-nette": "^1.1.0",
     "phpstan/phpstan-strict-rules": "^1.4.4"
   },
+  "conflict": {
+    "nette/utils": "<3.2.5"
+  },
   "autoload": {
     "psr-4": {
       "Contributte\\OAuth2Server\\": "src"
