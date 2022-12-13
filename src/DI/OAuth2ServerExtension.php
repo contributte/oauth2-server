@@ -106,9 +106,11 @@ class OAuth2ServerExtension extends CompilerExtension
 
 					$grantDefinition->setFactory(AuthCodeGrant::class, ['authCodeTTL' => $ttl]);
 					break;
+
 				case self::GRANT_CLIENT_CREDENTIALS:
 					$grantDefinition->setFactory(ClientCredentialsGrant::class);
 					break;
+
 				case self::GRANT_IMPLICIT:
 					$ttl = isset($options->accessTokenTTL) && $options->accessTokenTTL !== false ? $options->accessTokenTTL : 'PT10M';
 
@@ -118,12 +120,15 @@ class OAuth2ServerExtension extends CompilerExtension
 
 					$grantDefinition->setFactory(ImplicitGrant::class, ['accessTokenTTL' => $ttl]);
 					break;
+
 				case self::GRANT_PASSWORD:
 					$grantDefinition->setFactory(PasswordGrant::class);
 					break;
+
 				case self::GRANT_REFRESH_TOKEN:
 					$grantDefinition->setFactory(RefreshTokenGrant::class);
 					break;
+
 				default:
 					throw new InvalidArgumentException(sprintf(
 						'Invalid or unsupported grant type "%s". Supported are %s.',
