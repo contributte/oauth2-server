@@ -23,7 +23,7 @@ Website ðŸš€ <a href="https://contributte.org">contributte.org</a> | Contact ðŸ‘
 To install latest version of `contributte/oauth2-server` use [Composer](https://getcomposer.org).
 
 ```bash
-composer install contributte/oauth2-server
+composer require contributte/oauth2-server
 ```
 
 ## Documentation
