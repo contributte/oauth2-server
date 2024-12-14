@@ -12,7 +12,11 @@ final class AccessTokenRepository implements AccessTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
+	public function getNewToken(
+		ClientEntityInterface $clientEntity,
+		array $scopes,
+		string|null $userIdentifier = null
+	): AccessTokenEntityInterface
 	{
 		// TODO: Implement getNewToken() method.
 	}
@@ -20,7 +24,7 @@ final class AccessTokenRepository implements AccessTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
+	public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity): void
 	{
 		// TODO: Implement persistNewAccessToken() method.
 	}
@@ -28,7 +32,7 @@ final class AccessTokenRepository implements AccessTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function revokeAccessToken($tokenId)
+	public function revokeAccessToken(string $tokenId): void
 	{
 		// TODO: Implement revokeAccessToken() method.
 	}
@@ -36,9 +40,10 @@ final class AccessTokenRepository implements AccessTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function isAccessTokenRevoked($tokenId)
+	public function isAccessTokenRevoked(string $tokenId): bool
 	{
 		// TODO: Implement isAccessTokenRevoked() method.
+		return true;
 	}
 
 }

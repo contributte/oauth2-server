@@ -3,19 +3,20 @@
 namespace Tests\Cases\DI;
 
 use Contributte\OAuth2Server\DI\OAuth2ServerExtension;
+use Contributte\Tester\Environment;
+use Contributte\Tester\Toolkit;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
-use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tester\FileMock;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
 Toolkit::test(function (): void {
-	$loader = new ContainerLoader(TEMP_DIR, true);
+	$loader = new ContainerLoader(Environment::getTmpDir(), true);
 	$class = $loader->load(function (Compiler $compiler): void {
 		$compiler->addExtension('oauth2.server', new OAuth2ServerExtension());
 		$compiler->loadConfig(FileMock::create('
@@ -47,7 +48,7 @@ Toolkit::test(function (): void {
 });
 
 Toolkit::test(function (): void {
-	$loader = new ContainerLoader(TEMP_DIR, true);
+	$loader = new ContainerLoader(Environment::getTmpDir(), true);
 	$class = $loader->load(function (Compiler $compiler): void {
 		$compiler->addExtension('oauth2.server', new OAuth2ServerExtension());
 		$compiler->loadConfig(FileMock::create('

@@ -2,6 +2,7 @@
 
 namespace Tests\Fixtures\Repositories;
 
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 final class ClientRepository implements ClientRepositoryInterface
@@ -10,17 +11,19 @@ final class ClientRepository implements ClientRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function getClientEntity($clientIdentifier)
+	public function getClientEntity(string $clientIdentifier): ?ClientEntityInterface
 	{
 		// TODO: Implement getClientEntity() method.
+		return null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function validateClient($clientIdentifier, $clientSecret, $grantType)
+	public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool
 	{
 		// TODO: Implement validateClient() method.
+		return false;
 	}
 
 }

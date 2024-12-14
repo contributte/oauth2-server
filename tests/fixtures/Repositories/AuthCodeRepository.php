@@ -11,7 +11,7 @@ final class AuthCodeRepository implements AuthCodeRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function getNewAuthCode()
+	public function getNewAuthCode(): AuthCodeEntityInterface
 	{
 		// TODO: Implement getNewAuthCode() method.
 	}
@@ -19,7 +19,7 @@ final class AuthCodeRepository implements AuthCodeRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
+	public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity): void
 	{
 		// TODO: Implement persistNewAuthCode() method.
 	}
@@ -27,7 +27,7 @@ final class AuthCodeRepository implements AuthCodeRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function revokeAuthCode($codeId)
+	public function revokeAuthCode(string $codeId): void
 	{
 		// TODO: Implement revokeAuthCode() method.
 	}
@@ -35,9 +35,10 @@ final class AuthCodeRepository implements AuthCodeRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function isAuthCodeRevoked($codeId)
+	public function isAuthCodeRevoked(string $codeId): bool
 	{
 		// TODO: Implement isAuthCodeRevoked() method.
+		return true;
 	}
 
 }

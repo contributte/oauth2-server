@@ -6,6 +6,8 @@ use Contributte\OAuth2Server\DI\OAuth2ServerExtension;
 use Contributte\Psr7\Psr7Response;
 use Contributte\Psr7\Psr7ServerRequest;
 use Contributte\Psr7\Psr7Stream;
+use Contributte\Tester\Environment;
+use Contributte\Tester\Toolkit;
 use DateInterval;
 use GuzzleHttp\Psr7\Uri;
 use League\OAuth2\Server\AuthorizationServer;
@@ -15,7 +17,6 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
-use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tester\FileMock;
 use Tests\Fixtures\Repositories\RefreshTokenRepository;
@@ -24,7 +25,7 @@ use Throwable;
 require_once __DIR__ . '/../../bootstrap.php';
 
 Toolkit::test(function (): void {
-	$loader = new ContainerLoader(TEMP_DIR, true);
+	$loader = new ContainerLoader(Environment::getTmpDir(), true);
 	$class = $loader->load(function (Compiler $compiler): void {
 		$compiler->addExtension('oauth2.server', new OAuth2ServerExtension());
 		$currentDir = __DIR__;
