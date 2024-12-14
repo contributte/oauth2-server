@@ -10,12 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 class Oauth2Response implements AppResponse
 {
 
-	/** @var ResponseInterface */
-	private $psr7;
-
-	public function __construct(ResponseInterface $psr7)
+	public function __construct(
+		private ResponseInterface $psr7,
+	)
 	{
-		$this->psr7 = $psr7;
 	}
 
 	public function send(IRequest $httpRequest, IResponse $httpResponse): void

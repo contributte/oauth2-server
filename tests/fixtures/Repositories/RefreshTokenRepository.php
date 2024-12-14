@@ -11,15 +11,16 @@ final class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function getNewRefreshToken()
+	public function getNewRefreshToken(): ?RefreshTokenEntityInterface
 	{
 		// TODO: Implement getNewRefreshToken() method.
+		return null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
+	public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity): void
 	{
 		// TODO: Implement persistNewRefreshToken() method.
 	}
@@ -27,7 +28,7 @@ final class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function revokeRefreshToken($tokenId)
+	public function revokeRefreshToken(string $tokenId): void
 	{
 		// TODO: Implement revokeRefreshToken() method.
 	}
@@ -35,9 +36,10 @@ final class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function isRefreshTokenRevoked($tokenId)
+	public function isRefreshTokenRevoked(string $tokenId): bool
 	{
 		// TODO: Implement isRefreshTokenRevoked() method.
+		return true;
 	}
 
 }
