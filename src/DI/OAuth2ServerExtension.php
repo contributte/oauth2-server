@@ -142,6 +142,7 @@ class OAuth2ServerExtension extends CompilerExtension
 				$ttl = new Statement(DateInterval::class, [$ttl]);
 			}
 
+			$authServer->addSetup('revokeRefreshTokens', [false]); 
 			$authServer->addSetup('enableGrantType', [$grantDefinition, $ttl]);
 		}
 	}
