@@ -3,7 +3,7 @@ includes:
 
 parameters:
 	level: 9
-	phpVersion: 80100
+	phpVersion: 80200
 
 	scanDirectories:
 		- src
@@ -13,5 +13,6 @@ parameters:
 
 	paths:
 		- src
+		- .docs
 
 	ignoreErrors:
