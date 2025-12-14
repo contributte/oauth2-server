@@ -42,22 +42,50 @@ class OAuth2ServerExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'encryptionKey' => Expect::anyOf(Expect::string(), Expect::type(Statement::class)),
-			'privateKey' => Expect::array([
-				'path' => Expect::string(),
-				'passPhrase' => Expect::string(),
+			'privateKey' => Expect::structure([
+				'path' => Expect::string()->required(),
+				'passPhrase' => Expect::string()->nullable(),
 				'permissionCheck' => Expect::bool(true),
-			]),
-			'publicKey' => Expect::array([
-				'path' => Expect::string(),
+			])->castTo('array'),
+			'publicKey' => Expect::structure([
+				'path' => Expect::string()->required(),
 				'permissionCheck' => Expect::bool(true),
-			]),
-			'grants' => Expect::array([
-				self::GRANT_AUTH_CODE => Expect::bool(false),
-				self::GRANT_CLIENT_CREDENTIALS => Expect::bool(false),
-				self::GRANT_IMPLICIT => Expect::bool(false),
-				self::GRANT_PASSWORD => Expect::bool(false),
-				self::GRANT_REFRESH_TOKEN => Expect::bool(false),
-			]),
+			])->castTo('array'),
+			'grants' => Expect::structure([
+				self::GRANT_AUTH_CODE => Expect::anyOf(
+					false,
+					Expect::structure([
+						'ttl' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+						'authCodeTTL' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+						'codeExchangeProof' => Expect::bool(false),
+					])->castTo('array'),
+				)->default(false),
+				self::GRANT_CLIENT_CREDENTIALS => Expect::anyOf(
+					false,
+					Expect::structure([
+						'ttl' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+					])->castTo('array'),
+				)->default(false),
+				self::GRANT_IMPLICIT => Expect::anyOf(
+					false,
+					Expect::structure([
+						'ttl' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+						'accessTokenTTL' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+					])->castTo('array'),
+				)->default(false),
+				self::GRANT_PASSWORD => Expect::anyOf(
+					false,
+					Expect::structure([
+						'ttl' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+					])->castTo('array'),
+				)->default(false),
+				self::GRANT_REFRESH_TOKEN => Expect::anyOf(
+					false,
+					Expect::structure([
+						'ttl' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
+					])->castTo('array'),
+				)->default(false),
+			])->castTo('array'),
 			'responseType' => Expect::type(Statement::class),
 		]);
 	}
@@ -94,11 +122,11 @@ class OAuth2ServerExtension extends CompilerExtension
 
 			switch ($grant) {
 				case self::GRANT_AUTH_CODE:
-					if (isset($options->codeExchangeProof) && $options->codeExchangeProof === true) {
+					if (isset($options['codeExchangeProof']) && $options['codeExchangeProof'] === true) {
 						$grantDefinition->addSetup('enableCodeExchangeProof');
 					}
 
-					$ttl = isset($options->authCodeTTL) && $options->authCodeTTL !== false ? $options->authCodeTTL : 'PT10M';
+					$ttl = $options['authCodeTTL'] ?? 'PT10M';
 
 					if (!$ttl instanceof Statement) {
 						$ttl = new Statement(DateInterval::class, [$ttl]);
@@ -112,7 +140,7 @@ class OAuth2ServerExtension extends CompilerExtension
 					break;
 
 				case self::GRANT_IMPLICIT:
-					$ttl = isset($options->accessTokenTTL) && $options->accessTokenTTL !== false ? $options->accessTokenTTL : 'PT10M';
+					$ttl = $options['accessTokenTTL'] ?? 'PT10M';
 
 					if (!$ttl instanceof Statement) {
 						$ttl = new Statement(DateInterval::class, [$ttl]);
@@ -137,12 +165,12 @@ class OAuth2ServerExtension extends CompilerExtension
 					));
 			}
 
-			$ttl = $options->ttl ?? null;
+			$ttl = $options['ttl'] ?? null;
 			if (!$ttl instanceof Statement && $ttl !== null) {
 				$ttl = new Statement(DateInterval::class, [$ttl]);
 			}
 
-			$authServer->addSetup('revokeRefreshTokens', [false]); 
+			$authServer->addSetup('revokeRefreshTokens', [false]);
 			$authServer->addSetup('enableGrantType', [$grantDefinition, $ttl]);
 		}
 	}
