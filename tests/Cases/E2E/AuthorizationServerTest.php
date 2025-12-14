@@ -33,14 +33,14 @@ Toolkit::test(function (): void {
 			oauth2.server:
 				encryptionKey: "Fc+FESy6/yfOlXMBW65BXoSZsfWJkP5jCV9w0fyFfw4="
 				privateKey:
-					path: "%s/../../fixtures/keys/private.key"
+					path: "%s/../../Fixtures/keys/private.key"
 					passPhrase: foo
 					permissionCheck: false
 				publicKey:
-					path: "%s/../../fixtures/keys/public.key"
+					path: "%s/../../Fixtures/keys/public.key"
 					permissionCheck: false
 				grants:
-					refreshToken: true
+					refreshToken: []
 
 			services:
 				- Tests\Fixtures\Repositories\ClientRepository
