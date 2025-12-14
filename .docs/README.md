@@ -40,15 +40,50 @@ oauth2.server:
 		permissionCheck: true
 	publicKey:
 		path: "/path/to/public.key"
-		passPhrase:
 		permissionCheck: true
 	grants:
-		authCode: true
-		clientCredentials: true
-		implicit: true
-		password: true
-		refreshToken: true
+		authCode:
+			ttl: PT1H
+		clientCredentials:
+			ttl: PT1H
+		implicit:
+			ttl: PT1H
+		password:
+			ttl: PT1H
+		refreshToken:
+			ttl: P7D
 ```
+
+### Grant Configuration
+
+Each grant type accepts an object with options. Use empty object `[]` to enable with defaults, or `false` to disable.
+
+**Common option:**
+- `ttl` - Access token lifetime (ISO 8601 duration)
+
+**authCode grant:**
+- `authCodeTTL` - Authorization code lifetime (default: `PT10M`)
+- `codeExchangeProof` - Enable PKCE (default: `false`)
+
+```neon
+grants:
+	authCode:
+		ttl: PT1H
+		authCodeTTL: PT5M
+		codeExchangeProof: true
+```
+
+**implicit grant:**
+- `accessTokenTTL` - Access token TTL for grant construction (default: `PT10M`)
+
+```neon
+grants:
+	implicit:
+		ttl: PT2H
+		accessTokenTTL: PT15M
+```
+
+**TTL format** uses [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations): `PT10M` (10 min), `PT1H` (1 hour), `P1D` (1 day), `P7D` (7 days)
 
 For encryption key, you can use `Defuse\Crypt\Key::loadFromAsciiSafeString($string)` or key in a string form.
 
