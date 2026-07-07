@@ -18,26 +18,20 @@
 Website 🚀 <a href="https://contributte.org">contributte.org</a> | Contact 👨🏻‍💻 <a href="https://f3l1x.io">f3l1x.io</a> | Twitter 🐦 <a href="https://twitter.com/contributte">@contributte</a>
 </p>
 
-An integration of League\OAuth2Server into Nette framework.
+An integration of League\OAuth2Server into Nette framework. See the official [League OAuth2 Server documentation](https://oauth2.thephpleague.com/) for details about OAuth server concepts.
 
 ## Versions
 
 | State       | Version | Branch   | Nette | PHP     |
 |-------------|---------|----------|-------|---------|
-| dev         | `^0.5`  | `master` | 3.0+  | `>=8.1` |
-| dev         | `^0.4`  | `master` | 3.0+  | `>=8.0` |
+| dev         | `^0.6`  | `master` | 3.2+  | `>=8.2` |
+| stable      | `^0.5`  | `master` | 3.2+  | `>=8.2` |
 
 ## Contents
 
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Example](#example)
-
-## Prologue
-
-`Contributte/OAuth2Server` brings `League/OAuth2Server` to your Nette applications.
-
-Please take a look at official documentation: [https://oauth2.thephpleague.com/](https://oauth2.thephpleague.com/)
 
 ## Installation
 
@@ -123,7 +117,7 @@ oauth2.server:
 Do not forget to register repositories as a services!
 
 For more information about The PHP League's OAuth2 server, check out
-it's [documentation](https://oauth2.thephpleague.com/). This package provides tiny wrappaper and integration into Nette
+its [documentation](https://oauth2.thephpleague.com/). This package provides a tiny wrapper and integration into Nette
 framework.
 
 ## Example
